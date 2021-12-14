@@ -1,7 +1,7 @@
 #program defines timezones when light will be on
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from tsl2561 import TSL2561
+from bh1750 import BH1750
 import RPi.GPIO as GPIO
 import time
 import os
@@ -43,7 +43,7 @@ else:
    lightstat.close()
    print("DEBUG: Lights are currently " + lights)
 
-   tsl = TSL2561(debug=True)
+   tsl = BH1750(debug=True)
    print("DEBUG: Lux value is currently " + str(tsl.lux()))
 
    if tsl.lux() < lowlux and lights == "OFF":
