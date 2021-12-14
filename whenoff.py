@@ -3,7 +3,7 @@
 # program defines timezones when light will be off
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from tsl2561 import TSL2561
+from bh1750 import BH1750
 import RPi.GPIO as GPIO
 import time
 import os
