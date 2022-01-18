@@ -2,12 +2,6 @@
 #           bh1750.py
 # Read data from a BH1750 digital light sensor.
 #
-# Author : Matt Hawkins
-# Date   : 26/06/2018
-#
-# For more information please visit :
-# https://www.raspberrypi-spy.co.uk/?s=bh1750
-#
 #---------------------------------------------------------------->
 
 import RPi.GPIO as GPIO
