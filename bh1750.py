@@ -1,13 +1,19 @@
-#!/usr/bin/python
-#!/usr/bin/env python
-
-# bh1750.py
+#
+#           bh1750.py
 # Read data from a BH1750 digital light sensor.
-
+#
+# Author : Matt Hawkins
+# Date   : 26/06/2018
+#
+# For more information please visit :
+# https://www.raspberrypi-spy.co.uk/?s=bh1750
+#
+#---------------------------------------------------------------->
 
 import RPi.GPIO as GPIO
 import smbus
 import time
+from datetime import datetime
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False) #just for terminal purposes
@@ -58,18 +64,46 @@ def setLightLevel():
   a = int(a)
   return a
 
-def main():
+def setTimeZones():
+  time_zone = []
+  temp1 = int(input("Enter number of ON zones: "))
+  for i in range(temp1):
+    time_zone.append(float(input("Enter starting hour of zone: ")))
+    time_zone.append(float(input("Enter ending hour of zone: ")))
+  return time_zone
 
+def main():
+  check = 0
   a=setLightLevel()
   print("a = ", a)
+  time_zone=setTimeZones()
+  number = int(len(time_zone)/2)
   while True:
-    lightLevel=readLight()
-    print("Light Level : " + format(lightLevel,'.2f') + " lx")
-    if lightLevel<=a:
-      GPIO.output(15,GPIO.LOW)
+    now = datetime.now()
+    current_hour = int(now.strftime("%H"))
+
+    for x in range(number):
+      if (current_hour > time_zone[x*2] and current_hour < time_zone[x*2+1]):
+        check = 1;
+        break;
+      else:
+        check = 0;
+
+    if check == 1:
+      lightLevel=readLight()
+      print("Light Level : " + format(lightLevel,'.2f') + " lx")
+      if lightLevel<=a:
+        GPIO.output(15,GPIO.LOW)
+        print("Output off")
+      else:
+        GPIO.output(15,GPIO.HIGH)
+        print("Output on")
     else:
-      GPIO.output(15,GPIO.HIGH)
+      print("Now in OFF zone, waiting for ON zone to set the light!")
+    
     time.sleep(2)
 
 if __name__=="__main__":
    main()
+
+
